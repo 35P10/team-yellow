@@ -1,0 +1,241 @@
+"""Creacion de tablero 8*8"""
+
+tablero=[]
+
+for i in range(8):
+    tablero.append(["◯"]*8)
+
+def show(fila,mat):
+    for i in range(fila):
+      print (mat[i])
+
+"""Agregar piezas
+
+Torre=♖
+Caballo=♘
+Alfil=♗
+Rey=♔
+Reina=♕
+Peon=♙
+
+"""
+
+def piezas(tablero):
+    for i in range(8):
+        tablero[len(tablero)-2][i]="♙"
+    tablero[len(tablero)-1][0]="♖"
+    tablero[len(tablero)-1][7]="♖"
+    tablero[len(tablero)-1][1]="♘"
+    tablero[len(tablero)-1][6]="♘"
+    tablero[len(tablero)-1][3]="♔"
+    tablero[len(tablero)-1][4]="♕"
+    tablero[len(tablero)-1][2]="♗"
+    tablero[len(tablero)-1][5]="♗"
+   
+#Reconoce la pieza e indica el movimiento que se va a realizar.
+def mover(tablero):
+    print("¿Que pieza desea mover?: ")
+    x=int(input("Fila: "))-1
+    if x<0 or x>7:
+        print("Fuera de rango")
+        return False
+    y=int(input("Columna: "))-1
+    if y<0 or y>7:
+        print("Fuera de rango")
+        return False
+    
+    if tablero[x][y]=="◯":
+        print("Casilla vacia")
+        return False
+    if tablero[x][y]=="♘":
+        caballo(tablero,x,y)
+    if tablero[x][y]=="♖":
+        torre(tablero,x,y)
+    if tablero[x][y]=="♔":
+        rey(tablero,x,y)
+    if tablero[x][y]=="♕":
+        reina(tablero,x,y)  
+    if tablero[x][y]=="♙":
+        peon(tablero,x,y)
+    if tablero[x][y]=="♗":
+        alfil(tablero,x,y)
+    show(8,tablero)
+    mover2(tablero,x,y)
+    
+
+def caballo(tablero,x,y):
+    print("Caballo seleccionado")
+    
+    if y>0 and x>1 and tablero[x-2][y-1]=="◯":
+        tablero[x-2][y-1]="★"
+    if y>1 and x>0 and tablero[x-1][y-2]=="◯":
+        tablero[x-1][y-2]="★"
+    if y<7 and x>1 and tablero[x-2][y+1]=="◯":
+        tablero[x-2][y+1]="★"
+    if y<6 and x>0 and tablero[x-1][y+2]=="◯":
+        tablero[x-1][y+2]="★"
+    if y>1 and x<7 and tablero[x+1][y-2]=="◯":
+        tablero[x+1][y-2]="★"
+    if y<6 and x<7 and tablero[x+1][y+2]=="◯":
+        tablero[x+1][y+2]="★"
+    if y>0 and x<6 and tablero[x+2][y-1]=="◯":
+        tablero[x+2][y-1]="★"
+    if y<7 and x<6 and tablero[x+2][y+1]=="◯":
+        tablero[x+2][y+1]="★"
+
+def peon(tablero,x,y):
+      if x==6:#Si se encuentra en la fila 7 puede moverme a dos casillas.
+            tablero[x-1][y]="★"
+            tablero[x-2][y]="★"
+      else:#Luego del primer movimiento solo se puede mover a una casilla.
+            tablero[x-1][y]="★"
+
+
+def torre(tablero,x,y):
+    print("Torre seleccionada")
+    xt=x
+    yt=y
+    while x!=-1: #Movimiento vertical Arriba
+        if tablero[x-1][y]=="◯":
+            tablero[x-1][y]="★"
+            x-=1
+        else:
+            break
+    x=xt
+    y=yt    
+    while x!=7: #Movimiento vertical Abajo
+        if tablero[x+1][y]=="◯":
+            tablero[x+1][y]="★"
+            x+=1
+        else:
+            break
+    x=xt
+    y=yt    
+    while y<7: #Movimiento horizontal Derecha
+        if tablero[x][y+1]=="◯":
+            tablero[x][y+1]="★"
+            y+=1
+        else:
+            break
+    x=xt
+    y=yt
+    while y>0: #Movimiento horizontal Izquierda
+        if tablero[x][y-1]=="◯":
+            tablero[x][y-1]="★"
+            y-=1
+        else:
+            break     
+    return tablero
+def mover2(tablero,x,y):#Mueve la pieza
+    print("A qué casilla desea mover la pieza")
+    a=int(input("Fila: "))-1
+    if a>7 or a<0:
+        return False
+    b=int(input("Columna: "))-1
+    if b>7 or b<0:
+        return False
+    if tablero[a][b]=="★":
+        tablero[a][b]=tablero[x][y]
+        tablero[x][y]="◯"
+        for i in range(8):#borra los marcadores de posibles movimientos
+            for j in range(8):
+                if tablero[i][j]=="★":
+                    tablero[i][j]="◯"
+        show(8,tablero)
+    else:
+        print("Movimiento Invalido")
+        return mover(tablero)
+
+        
+def alfil(tablero,x,y):
+    ry=y
+    rx=x
+    if x>0:
+        while x>-1 and y<7:#Diagonal derecha arriba
+            if tablero[x-1][y+1]=="◯":
+                tablero[x-1][y+1]="★"
+            else:
+                break
+            y+=1
+            x-=1
+
+
+        y=ry
+        x=rx
+        while x>-1 and y>0:#Diagonal arriba izquierda
+            if tablero[x-1][y-1]=="◯":
+
+                tablero[x-1][y-1]="★"
+            else:
+                break
+            y-=1
+            x-=1
+
+    if x<7:
+        y=ry
+        x=rx
+        while y>-1 and x<7:#Diagonal izquiera abajo
+            if tablero[x+1][y-1]=="◯":
+                tablero[x+1][y-1]="★"
+            else:
+                break
+            y-=1
+            x+=1
+        y=ry
+        x=rx
+        while x<7 and y<7:#Diagonal derecha abajo
+            if tablero[x+1][y+1]=="◯":
+                tablero[x+1][y+1]="★"
+            else:
+                break
+            y+=1
+            x+=1
+    return tablero
+    
+def reina(tablero,x,y):
+    print("Reina seleccionado")
+    xt=x
+    yt=y
+    torre(tablero,x,y)
+    ry=yt
+    rx=xt
+    alfil(tablero,x,y)
+    return tablero
+
+def rey(tablero,x,y):
+    if x>0:#Movimiento recto arriba
+        if tablero[x-1][y]=="◯":
+            tablero[x-1][y]="★"
+    if x>0 and y>0:#Diagonal izquiera arriba
+        if tablero[x-1][y-1]=="◯":
+            tablero[x-1][y-1]="★"
+    if x>0 and y<7:#Diagonal derecha arriba
+        if tablero[x-1][y+1]=="◯":
+            tablero[x-1][y+1]="★"
+    if x<7:#Movimiento recto abajo
+        if tablero[x+1][y]=="◯":
+            tablero[x+1][y]="★"
+    if x<7 and y<7:#Diagonal derecha abajo
+        if tablero[x+1][y+1]=="◯":
+            tablero[x+1][y+1]="★"
+    if x<7 and y>0:#Diagonal izquierda abajo
+        if tablero[x+1][y-1]=="◯":
+            tablero[x+1][y-1]="★"
+    if y>0:#Movimiento recto izquierda
+        if tablero[x][y-1]=="◯":
+            tablero[x][y-1]="★"
+    if y<7:#Movimiento recto derecha
+        if tablero[x][y+1]=="◯":
+            tablero[x][y+1]="★"
+    
+    
+#Permite que se ejecute el tablero con la piezas
+print("----Ajedrez----\n")
+piezas(tablero)
+show(8,tablero)
+x=1
+#Permite que se sigua ejecutando el codigo hasta que el jugador coloque 0
+while x!=0:
+    mover(tablero)#MoverPiezaElegida
+    print("Ingrese 0 si desea terminar") 
+    x=int(input("Ingrese opcion: "))
